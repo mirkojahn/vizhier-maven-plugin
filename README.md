@@ -1,4 +1,4 @@
-# Visualize Maven Hierarchy: Plug-in Documentation
+# Visualize Maven Hierarchy Plug-in
 
 The `vizhier-maven-plugin` is an attempt to simplify the understandabilty of a complex Maven project by rendering a dependency graph of its components.
 
