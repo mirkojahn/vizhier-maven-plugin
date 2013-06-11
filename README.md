@@ -7,9 +7,9 @@ The `vizhier-maven-plugin` is an attempt to simplify the understandabilty of a c
 Currently… not much! This project is driven by my annoyance of having to manually create documentation for stuff that is in constant change anyway and should be rather simple to accomplish with bit of tool support. So here we are with a few hours of hacking - nothing pretty, but it does what I wanted.
 
 - create a DOT diagram file describing the project modules
-- include various maven hierarchy types (parent pom, module, regular dependencies^(*) and imports^(*) ) for* the dependency graph display
+- include various maven hierarchy types (parent pom, module, regular dependencies\* and imports\* ) for the dependency graph display
 
-^(*) not (yet) supported
+\*) not (yet) supported
 
 ## General Usage
 
