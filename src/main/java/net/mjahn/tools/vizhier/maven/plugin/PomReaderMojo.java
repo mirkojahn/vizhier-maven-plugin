@@ -113,7 +113,7 @@ public class PomReaderMojo extends AbstractMojo {
         }
     }
     
-    PomMeta getPomsFromSubFolders(File folder, List<PomMeta> poms, PomMeta parentPom) throws Exception {
+    void getPomsFromSubFolders(File folder, List<PomMeta> poms, PomMeta parentPom) throws Exception {
         // first make sure, we really are in a folder
         if(folder.isDirectory()) {
             // now, get the pom in this directory (be more robust new File(folder,"pom.xml"); would have worked as well.
@@ -139,7 +139,6 @@ public class PomReaderMojo extends AbstractMojo {
                 
             }
         }
-        return null;
     }
     
     PomMeta getMetaDataFromPom(File pomFile) throws Exception {

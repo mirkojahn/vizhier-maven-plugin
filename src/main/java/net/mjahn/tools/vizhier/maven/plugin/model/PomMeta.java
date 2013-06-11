@@ -3,6 +3,7 @@ package net.mjahn.tools.vizhier.maven.plugin.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.maven.schema.jaxb.Dependency;
 import org.apache.maven.schema.jaxb.Model;
 import org.apache.maven.schema.jaxb.Model.Modules;
 
@@ -18,6 +19,7 @@ public class PomMeta {
     private String name = null;
     private PomType pomType = null;
     private Model model;
+    private List<ImportDependency> importDeps;
     private final static String ARTIFACT_ID_SEPARATOR = ":";
     List<String> modulePomIds = new ArrayList<String>();
     
@@ -112,11 +114,54 @@ public class PomMeta {
                     modulePomIds.add(modulePomId);
                     // break here, we got enough
                     return; 
+                } else {
+                    // FIXME: this looks like a break in the inheritance structure, maybe its good to comment?
+                    System.out.println("the pom "+getId()+" is not represented with a module dependency in its parent: "+modulePomId);
                 }
             }
         }
     }
 
+    /*
+     * 
+ <dependencyManagement>
+   <dependencies>
+     <dependency>
+       <groupId>org.test</groupId>
+       <artifactId>ThirdParty-BOM</artifactId>
+       <version>1.0</version>
+       <type>pom</type>
+       <scope>import</scope>
+     </dependency>
+   </dependencies>
+ </dependencyManagement>
+     * 
+     */
+    public List<ImportDependency> getImportDependencies(){
+        if(importDeps == null || importDeps.isEmpty()) {
+            importDeps = new ArrayList<ImportDependency>();
+            try {
+                // prevent NPE's
+                List<Dependency>  deps = model.getDependencyManagement().getDependencies().getDependency();
+                if(deps != null && !deps.isEmpty()){
+                    // ok we at least have such dependencies, so check them out
+                    Iterator<Dependency> iter = deps.iterator();
+                    while(iter.hasNext()){
+                        Dependency dep = iter.next();
+                        if(dep.getScope() != null && "import".equals(dep.getScope())) {
+                            // ok, we got one... now add it to the list
+                            importDeps.add(new ImportDependency(dep));
+                        }
+                    }
+                }
+
+            } catch (Exception e){
+                // do nothing here - not relevant for now
+            }
+        }
+        return importDeps;
+    }
+    
     public List<String> getModulePomIds() {
         return modulePomIds;
     }

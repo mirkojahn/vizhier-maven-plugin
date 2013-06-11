@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import net.mjahn.tools.vizhier.maven.plugin.model.ImportDependency;
 import net.mjahn.tools.vizhier.maven.plugin.model.PomMeta;
 import net.mjahn.tools.vizhier.maven.plugin.model.PomType;
 
@@ -79,11 +80,14 @@ public class DotNotationFormatter {
         if(pomIds != null && !pomIds.isEmpty()){
             Iterator<String> iter = pomIds.iterator();
             while(iter.hasNext()){
+                // FIXME: in case the node is not know, it will not have a nice label 
+                // this usecase is very likely, so potentially create a node for this?!
+                
                 builder.append("\t");
                 builder.append(escape(pom.getId()));
                 builder.append(" -> ");
                 builder.append(escape(iter.next()));
-                builder.append(" [label=\"hasModule\",color=green,weight=0.9]\n");
+                builder.append(" [label=\"hasModule\",color=green,weight=0.9];\n");
             }
         }
     }
@@ -95,6 +99,18 @@ public class DotNotationFormatter {
     
     public void addImports(PomMeta pom) {
         // FIXME: implement this!
+        List<ImportDependency> deps = pom.getImportDependencies();
+        if( deps != null && !deps.isEmpty()) {
+            Iterator<ImportDependency> iter = deps.iterator();
+            while(iter.hasNext()){
+                ImportDependency dep = iter.next();
+                builder.append("\t");
+                builder.append(escape(pom.getId()));
+                builder.append(" -> ");
+                builder.append(escape(dep.getId()));
+                builder.append(" [label=\"imports config\",color=orange,weight=0.5,style=dotted];\n");
+            }
+        }
         // x -> y [label="imports config",color=orange,weight=0.5,style=dotted]
     }
     
